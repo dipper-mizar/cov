@@ -1,0 +1,9 @@
+#c1_3 {
+	width: 100%;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 190px;
+	/* background: #777777; */
+}
