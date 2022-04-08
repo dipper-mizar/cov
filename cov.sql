@@ -22,16 +22,16 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `details`;
 CREATE TABLE `details`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  `province` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `city` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `confirm` int(11) NULL DEFAULT NULL,
-  `confirm_add` int(11) NULL DEFAULT NULL,
-  `heal` int(11) NULL DEFAULT NULL,
-  `dead` int(11) NULL DEFAULT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `update_time` DATETIME NULL DEFAULT NULL,
+  `province` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `city` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `confirm` INT(11) NULL DEFAULT NULL,
+  `confirm_add` INT(11) NULL DEFAULT NULL,
+  `heal` INT(11) NULL DEFAULT NULL,
+  `dead` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 431 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = INNODB AUTO_INCREMENT = 431 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of details
@@ -473,17 +473,17 @@ INSERT INTO `details` VALUES (431, '2020-03-01 09:27:11', '西藏', '地区待�
 -- ----------------------------
 DROP TABLE IF EXISTS `history`;
 CREATE TABLE `history`  (
-  `ds` datetime(5) NOT NULL COMMENT '日期',
-  `confirm` int(11) NULL DEFAULT NULL COMMENT '累积确诊',
-  `confirm_add` int(11) NULL DEFAULT NULL,
-  `suspect` int(11) NULL DEFAULT NULL,
-  `suspect_add` int(11) NULL DEFAULT NULL,
-  `heal` int(11) NULL DEFAULT NULL,
-  `heal_add` int(11) NULL DEFAULT NULL,
-  `dead` int(11) NULL DEFAULT NULL,
-  `dead_add` int(11) NULL DEFAULT NULL,
+  `ds` DATETIME NOT NULL COMMENT '日期',
+  `confirm` INT(11) NULL DEFAULT NULL COMMENT '累积确诊',
+  `confirm_add` INT(11) NULL DEFAULT NULL,
+  `suspect` INT(11) NULL DEFAULT NULL,
+  `suspect_add` INT(11) NULL DEFAULT NULL,
+  `heal` INT(11) NULL DEFAULT NULL,
+  `heal_add` INT(11) NULL DEFAULT NULL,
+  `dead` INT(11) NULL DEFAULT NULL,
+  `dead_add` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ds`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = INNODB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of history
@@ -537,39 +537,42 @@ INSERT INTO `history` VALUES ('2020-02-27 00:00:00.00000', 78959, 329, 2308, 452
 INSERT INTO `history` VALUES ('2020-02-28 00:00:00.00000', 79389, 430, 1418, 248, 39049, 2892, 2838, 47);
 INSERT INTO `history` VALUES ('2020-02-29 00:00:00.00000', 79968, 579, 851, 132, 41675, 2626, 2873, 35);
 
--- ----------------------------
--- Table structure for hotsearch
--- ----------------------------
-DROP TABLE IF EXISTS `hotsearch`;
-CREATE TABLE `hotsearch`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dt` datetime(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`, `dt`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of hotsearch
--- ----------------------------
-INSERT INTO `hotsearch` VALUES (1, '2020-03-01 17:41:47', '新型肺炎实时动态489214');
-INSERT INTO `hotsearch` VALUES (2, '2020-03-01 17:41:47', '现有疑似病例不足千人328574');
-INSERT INTO `hotsearch` VALUES (3, '2020-03-01 17:41:47', '机票卖出白菜价317500');
-INSERT INTO `hotsearch` VALUES (4, '2020-03-01 17:41:47', '北京3个不得擅自304202');
-INSERT INTO `hotsearch` VALUES (5, '2020-03-01 17:41:47', '31省区市新增573例新冠肺炎239620');
-INSERT INTO `hotsearch` VALUES (6, '2020-03-01 17:41:47', '韩国出生45天婴儿感染新冠肺炎214446');
-INSERT INTO `hotsearch` VALUES (7, '2020-03-01 17:41:47', '除湖北外省市4月底可摘口罩210862');
-INSERT INTO `hotsearch` VALUES (8, '2020-03-01 17:41:47', '湖北疫情风险等级评估报告出炉190462');
-INSERT INTO `hotsearch` VALUES (9, '2020-03-01 17:41:47', '超4万名患者治愈出院187788');
-INSERT INTO `hotsearch` VALUES (10, '2020-03-01 17:41:47', '武汉中心医院江学庆感染去世132190');
-INSERT INTO `hotsearch` VALUES (11, '2020-03-01 17:41:47', '一家人武汉修轮胎滞留1个月113402');
-INSERT INTO `hotsearch` VALUES (12, '2020-03-01 17:41:47', '法国新冠肺炎确诊升至100例102676');
-INSERT INTO `hotsearch` VALUES (13, '2020-03-01 17:41:47', '诊疗方案二次推荐清肺排毒汤95114');
-INSERT INTO `hotsearch` VALUES (14, '2020-03-01 17:41:47', '广西贺州32岁医生抗疫牺牲94474');
-INSERT INTO `hotsearch` VALUES (15, '2020-03-01 17:41:47', '巴黎半程马拉松因疫情取消90374');
-INSERT INTO `hotsearch` VALUES (16, '2020-03-01 17:41:47', '80名中国公民在俄隔离遭虐待不实89614');
-INSERT INTO `hotsearch` VALUES (17, '2020-03-01 17:41:47', '湖北男子隔离21天后复工被赶出67434');
-INSERT INTO `hotsearch` VALUES (18, '2020-03-01 17:41:47', '拾荒老人遭殴打打人者被拘10日62436');
-INSERT INTO `hotsearch` VALUES (19, '2020-03-01 17:41:47', '大邱医院改造集装箱收治患者55592');
-INSERT INTO `hotsearch` VALUES (20, '2020-03-01 17:41:47', '安徽全省退出高风险地区51112');
-
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+SELECT update_time FROM details ORDER BY id DESC LIMIT 1;
+`details`
+SELECT update_time FROM details ORDER BY update_time DESC LIMIT 1;
+SELECT city,confirm FROM details WHERE update_time=(SELECT update_time FROM details ORDER BY update_time DESC LIMIT 1) AND province NOT IN ("湖北","北京","上海","天津","重庆");
+
+CREATE TABLE `history`  (
+  `ds` DATETIME NOT NULL COMMENT '日期',
+  `confirm` INT(11) NULL DEFAULT NULL COMMENT '累积确诊',
+  `confirm_add` INT(11) NULL DEFAULT NULL,
+  `suspect` INT(11) NULL DEFAULT NULL,
+  `suspect_add` INT(11) NULL DEFAULT NULL,
+  `heal` INT(11) NULL DEFAULT NULL,
+  `heal_add` INT(11) NULL DEFAULT NULL,
+  `dead` INT(11) NULL DEFAULT NULL,
+  `dead_add` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ds`) USING BTREE
+) ENGINE = INNODB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+
+DROP TABLE IF EXISTS `location`;
+CREATE TABLE `location` (
+  `id` INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `location` VARCHAR(20) NOT NULL,
+  `time` VARCHAR(20) NOT NULL,
+  `count` VARCHAR(20) NOT NULL
+
+)ENGINE = INNODB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `csrf_token` VARCHAR(100),
+  `location` VARCHAR(20),
+  `queue_num` VARCHAR(100),
+  `email` VARCHAR(100)
+
+)ENGINE = INNODB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
