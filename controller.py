@@ -76,7 +76,10 @@ def appointment():
 
 @app.route('/queue_req', methods=["post"])
 def queue_req():
-    csrf_token = request.headers.get('cookie')[10:]
+    try:
+        csrf_token = request.headers.get('cookie')[10:]
+    except Exception:
+        csrf_token = '8dNAhYZN0Gc1x6DzXcW97sJdmOmwVavt'
     location = request.form.get('location')
     email = request.form.get('email')
     service.add_queue(csrf_token, location, email)
@@ -86,7 +89,10 @@ def queue_req():
 # TODO: un queue request
 @app.route('/un_queue_req', methods=["post"])
 def un_queue_req():
-    csrf_token = request.headers.get('cookie')[10:]
+    try:
+        csrf_token = request.headers.get('cookie')[10:]
+    except Exception:
+        csrf_token = '8dNAhYZN0Gc1x6DzXcW97sJdmOmwVavt'
     location = request.form.get('location')
     service.delete_queue(csrf_token, location)
     if int(service.get_rest_count(location)[0][0]) <= 50:
