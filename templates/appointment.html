@@ -15,6 +15,10 @@
     <div id="queue">
         <a href="/" style="color:blue; height: 23px">&lt;&lt;返回全国疫情实时跟踪视图</a>
     </div>
+    <div>
+        <p style="color: whitesmoke">{% if session.username %}你好，{{ session.username }}。
+            <a href="/logout/" style="color: whitesmoke">点击退出登录</a>{% endif %}</p>
+    </div>
     <div id="c1_1">
         <div class="txt">
             <h2>地点</h2>
@@ -48,8 +52,9 @@
         <div class="num">
 
             {% if obj.in_queue1 is true %}
-                <button id="c1_2_btn" class="btn btn-primary" data-toggle="modal" data-target="#deleteModal">排队中：
-                    {{ obj.email1 }}</button>
+                <button id="c1_2_btn_in_queue" class="btn btn-primary" data-toggle="modal" data-target="#deleteModal"
+                        onclick="judge_username('c1_2_btn_in_queue', '{{ session.username }}')">排队中：
+                    {{ obj.username1 }}</button>
             {% else %}
                 <button id="c1_2_btn" class="btn btn-primary" data-target="#myModal" data-toggle="modal">排队</button>
             {% endif %}
@@ -71,10 +76,11 @@
         </div>
         <div class="num">
             {% if obj.in_queue2 == true %}
-                <button id="c1_3_btn" class="btn btn-primary" data-toggle="modal" data-target="#deleteModal">排队中：
-                    {{ obj.email2 }}</button>
+                <button id="c1_3_btn_in_queue" class="btn btn-primary" data-toggle="modal" data-target="#deleteModal"
+                        onclick="judge_username('c1_3_btn_in_queue', '{{ session.username }}')">排队中：
+                    {{ obj.username2 }}</button>
             {% else %}
-                <button id="c1_2_btn" class="btn btn-primary" data-target="#myModal" data-toggle="modal">排队</button>
+                <button id="c1_3_btn" class="btn btn-primary" data-target="#myModal" data-toggle="modal">排队</button>
             {% endif %}
         </div>
     </div>
@@ -88,6 +94,12 @@
                 <form id="formData" class="form-horizontal">
                     <div class="modal-body">
                         <div class="form-group">
+                            <label class="control-label col-lg-2">用户：</label>
+                            <div class="col-lg-9">
+                                <input type="text" onfocus=this.blur() value="{{ session.username }}" name="username"
+                                       placeholder=""
+                                       class="form-control"><br>
+                            </div>
                             <label class="control-label col-lg-2">邮箱：</label>
                             <div class="col-lg-9">
                                 <input type="text" value="" name="email" placeholder="请输入邮箱"
@@ -123,9 +135,10 @@
                         <div class="form-group">
                             <label class="control-label">即将取消排队？</label>
                         </div>
-                        <label class="control-label col-lg-2">地点：</label>
+                        <label class="control-label col-lg-2">用户：</label>
                         <div class="col-lg-9">
-                            <input type="text" value="" name="location" placeholder="请输入地址"
+                            <input type="text" onfocus=this.blur() value="{{ session.username }}" name="username"
+                                   placeholder=""
                                    class="form-control"><br>
                         </div>
                     </form>
@@ -167,6 +180,14 @@
                 }
             }
         })
+    }
+
+    function judge_username(id, session_username) {
+        const res = document.getElementById(id).innerText;
+        if (res.substring(5) !== session_username) {
+            alert("您不能取消别人的预约")
+            window.location.reload()
+        }
     }
 </script>
 </html>

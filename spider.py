@@ -39,7 +39,10 @@ def get_tencent_data():
         suspect = i["suspect"]
         heal = i["heal"]
         dead = i["dead"]
-        history[ds].update({"confirm_add": confirm, "suspect_add": suspect, "heal_add": heal, "dead_add": dead})
+        try:
+            history[ds].update({"confirm_add": confirm, "suspect_add": suspect, "heal_add": heal, "dead_add": dead})
+        except:
+            continue
 
     details = []
     update_time = data_all1["lastUpdateTime"]

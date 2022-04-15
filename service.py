@@ -23,7 +23,23 @@ def get_user_info():
     conn = None
     try:
         conn, cursor = utils.get_conn()
-        sql = "select csrf_token, location, queue_num, email from user"
+        sql = "select username, location, queue_num, email from user"
+        cursor.execute(sql)
+        data = cursor.fetchall()
+        return data
+    except:
+        traceback.print_exc()
+    finally:
+        utils.close_conn(conn, cursor)
+
+
+def get_users_entile_data():
+    cursor = None
+    conn = None
+    try:
+        conn, cursor = utils.get_conn()
+        sql = "select username, location, queue_num, email from user where location is not null and queue_num is " \
+              "not null order by id desc limit 2"
         cursor.execute(sql)
         data = cursor.fetchall()
         return data
@@ -61,14 +77,13 @@ def cut_email(email):
     return domain_str
 
 
-def add_queue(csrf_token, location, email):
+def add_queue(username, location, email):
     queue_num = _create_random_string()
     cursor = None
     conn = None
     try:
         conn, cursor = utils.get_conn()
-        sql1 = 'insert into user(csrf_token, location, queue_num, email) values("%s", "%s", "%s", "%s")' % \
-               (csrf_token, location, queue_num, email)
+        sql1 = 'update user set location="%s", queue_num="%s" where username="%s"' % (location, queue_num, username)
         cursor.execute(sql1)
         conn.commit()
         rest_count = int(get_rest_count(location)[0][0]) + 1
@@ -81,12 +96,12 @@ def add_queue(csrf_token, location, email):
         utils.close_conn(conn, cursor)
 
 
-def delete_queue(csrf_token, location):
+def delete_queue(username, location):
     cursor = None
     conn = None
     try:
         conn, cursor = utils.get_conn()
-        sql1 = 'delete from user where csrf_token="%s" and location="%s"' % (csrf_token, location)
+        sql1 = 'update user set location=null, queue_num=null where username="%s"' % username
         cursor.execute(sql1)
         conn.commit()
         rest_count = int(get_rest_count(location)[0][0]) - 1
@@ -114,12 +129,12 @@ def get_rest_count(location):
         utils.close_conn(conn, cursor)
 
 
-def get_user_email(csrf_token):
+def get_user_email(username):
     cursor = None
     conn = None
     try:
         conn, cursor = utils.get_conn()
-        sql = 'select email from user where csrf_token="%s"' % csrf_token
+        sql = 'select email from user where username="%s"' % username
         cursor.execute(sql)
         data = cursor.fetchall()
         return data
