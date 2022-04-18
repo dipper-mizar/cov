@@ -107,6 +107,8 @@ def appointment():
 @app.route('/queue_req/', methods=["post"])
 def queue_req():
     username = request.form.get('username')
+    if not username:
+        return jsonify("Please login first")
     location = request.form.get('location')
     email = request.form.get('email')
     service.add_queue(username, location, email)

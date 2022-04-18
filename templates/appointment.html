@@ -56,7 +56,8 @@
                         onclick="judge_username('c1_2_btn_in_queue', '{{ session.username }}')">排队中：
                     {{ obj.username1 }}</button>
             {% else %}
-                <button id="c1_2_btn" class="btn btn-primary" data-target="#myModal" data-toggle="modal">排队</button>
+                <button id="c1_2_btn" class="btn btn-primary" data-target="#myModal" data-toggle="modal"
+                onclick="judge_islogin('{{ session.username }}')">排队</button>
             {% endif %}
 
         </div>
@@ -80,7 +81,8 @@
                         onclick="judge_username('c1_3_btn_in_queue', '{{ session.username }}')">排队中：
                     {{ obj.username2 }}</button>
             {% else %}
-                <button id="c1_3_btn" class="btn btn-primary" data-target="#myModal" data-toggle="modal">排队</button>
+                <button id="c1_3_btn" class="btn btn-primary" data-target="#myModal" data-toggle="modal"
+                onclick="judge_islogin('{{ session.username }}')">排队</button>
             {% endif %}
         </div>
     </div>
@@ -186,6 +188,13 @@
         const res = document.getElementById(id).innerText;
         if (res.substring(5) !== session_username) {
             alert("您不能取消别人的预约")
+            window.location.reload()
+        }
+    }
+
+    function judge_islogin(username) {
+        if (username === '') {
+            alert("请先登录")
             window.location.reload()
         }
     }
