@@ -30,7 +30,7 @@
             <h2>检测时间</h2>
         </div>
         <div class="txt">
-            <h2>当前排队人数</h2>
+            <h2>剩余人数</h2>
         </div>
         <div class="txt">
             <h2>操作</h2>
@@ -186,7 +186,11 @@
 
     function judge_username(id, session_username) {
         const res = document.getElementById(id).innerText;
-        if (res.substring(5) !== session_username) {
+        if (session_username === "") {
+            alert("请先登录")
+            window.location.reload()
+        }
+        else if (res.substring(5) !== session_username) {
             alert("您不能取消别人的预约")
             window.location.reload()
         }
