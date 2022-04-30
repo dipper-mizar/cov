@@ -2,6 +2,21 @@ import utils
 import traceback
 
 
+def get_location_by_username(username):
+    cursor = None
+    conn = None
+    try:
+        conn, cursor = utils.get_conn()
+        sql = 'select location from user where username = "%s"' % username
+        cursor.execute(sql)
+        location = cursor.fetchall()
+        return location[0]
+    except:
+        traceback.print_exc()
+    finally:
+        utils.close_conn(conn, cursor)
+
+
 def query_user_by_username(username):
     cursor = None
     conn = None

@@ -82,21 +82,48 @@ def update_data():
 
 @app.route('/appointment/', methods=["get"])
 def appointment():
+    service.active_location_count()
     data = service.get_na_info()
     obj = {"location1": data[0][0], "time1": data[0][1], "count1": data[0][2],
            "location2": data[1][0], "time2": data[1][1], "count2": data[1][2]}
+    try:
+        username = session['username']
+        if username is not None:
+            # TODO: Query obj by username
+            user_info = service.get_user_info(username)
+            location = service.get_na_by_name(user_info[0][1])
+            # Already login but not in queue
+            if location is None:
+                return render_template("appointment.html", obj=obj)
+
+            user_rank = service.get_user_rank(username)
+            if user_info[0][1] == '校医院一楼':
+                obj = {"location1": '校医院一楼', "time1": location[0][1], "count1": str(int(user_rank[0])) + " / " + data[0][2],
+                       'queue_num1': "A-" + user_info[0][2], 'username1': user_info[0][0], 'in_queue1': True,
+                       "location2": '行政楼大厅', "time2": data[1][1], "count2": "~ / " + data[1][2]}
+
+            elif user_info[0][1] == '行政楼大厅':
+                obj = {"location1": '校医院一楼', "time1": data[0][1], "count1": "~ / " + data[0][2],
+                       "location2": '行政楼大厅', "time2": location[0][1], "count2": str(int(user_rank[0])) + " / " + data[1][2],
+                       'queue_num2': "B-" + user_info[0][2], 'username2': user_info[0][0], 'in_queue2': True}
+            return render_template('appointment.html', obj=obj)
+
+    except KeyError:
+        print("Not in login now")
+
     users = service.get_users_entile_data()
+    # Noby in queue
     if not users:
         return render_template('appointment.html', obj=obj)
 
     for user in users:
         if user[0] and user[1] and user[2] and user[3] is not None:
             if user[1] == '校医院一楼':
-                obj['queue_num1'] = 'A-' + user[2]
+                obj['queue_num1'] = user[2]
                 obj['username1'] = user[0]
                 obj['in_queue1'] = True
             elif user[1] == '行政楼大厅':
-                obj['queue_num2'] = 'B-' + user[2]
+                obj['queue_num2'] = user[2]
                 obj['username2'] = user[0]
                 obj['in_queue2'] = True
         else:
@@ -112,25 +139,37 @@ def queue_req():
     location = request.form.get('location')
     email = request.form.get('email')
     service.add_queue(username, location, email)
+    user = user_db.query_user_by_username(username)
+    queue_num = user[0][4]
+    rank = str(user[0][6])
+    message = Message('预约排队提醒', sender=app.config['MAIL_USERNAME'], recipients=[email])
+    message.body = '您好，' + username + '，请前去' + location + '进行核酸检测，您目前第【' + rank + '】位，本次预约号为：' + queue_num + '。'
+    mail.send(message)
     return jsonify("OK")
 
 
 @app.route('/un_queue_req/', methods=["post"])
 def un_queue_req():
     username = request.form.get('username')
-    users = service.get_users_entile_data()
-    location = ''
-    for user in users:
-        if username == user[0]:
-            location = user[1]
-            break
-    service.delete_queue(username, location)
-    if int(service.get_rest_count(location)[0][0]) <= 50:
-        email = service.get_user_email(username)[0][0]
-        message = Message('预约排队提醒', sender=app.config['MAIL_USERNAME'], recipients=[email])
-        message.body = '请前去预约的地点进行核酸检测。'
-        mail.send(message)
-    return jsonify("OK")
+    user_rank = service.get_user_rank(username)[0]
+    user_location = user_db.get_location_by_username(username)
+    if user_rank > 50:
+        service.delete_queue(username, user_location)
+        service.promote_rank(user_location[0], user_rank)
+        return jsonify("OK")
+    elif user_rank <= 50:
+        service.delete_queue(username, user_location)
+        if service.get_max_rank(user_location)[0][0] >= 51:
+            outside_email = service.get_outside_one(user_location)[0][5]
+            if outside_email is not None:
+                user = service.get_outside_one(user_location)
+                queue_num = user[0][4]
+                rank = str(user[0][6]-1)
+                message = Message('预约排队提醒', sender=app.config['MAIL_USERNAME'], recipients=[outside_email])
+                message.body = '您好，' + user[0][1] + '，请前去' + user_location[0] + '进行核酸检测，您目前第【' + rank + '】位，本次预约号为：' + queue_num + '。'
+                mail.send(message)
+                service.promote_rank(user_location[0], user_rank)
+        return jsonify("OK")
 
 
 @app.route('/time/')

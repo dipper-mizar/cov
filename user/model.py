@@ -3,12 +3,13 @@ from flask_login import UserMixin
 
 
 class User(UserMixin):
-    def __init__(self, username, password, location=None, queue_num=None, email=None):
+    def __init__(self, username, password, location=None, queue_num=None, email=None, rank=None):
         self.username = username
         self.password = password
         self.location = location
         self.queue_num = queue_num
         self.email = email
+        self.rank = rank
 
     def get_id(self):
         pass
@@ -34,6 +35,9 @@ class User(UserMixin):
     def get_email(self):
         return self.email
 
+    def get_rank(self):
+        return self.rank
+
     def set_username(self, username):
         self.username = username
 
@@ -49,3 +53,5 @@ class User(UserMixin):
     def set_email(self, email):
         self.email = email
 
+    def set_rank(self, rank):
+        self.rank = rank
