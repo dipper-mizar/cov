@@ -50,7 +50,6 @@ def get_users_entile_data():
 
 
 def _create_random_string(len=6):
-    print('wet'.center(10, '*'))
     raw = ""
     range1 = range(58, 65)  # between 0~9 and A~Z
     range2 = range(91, 97)  # between A~Z and a~z
