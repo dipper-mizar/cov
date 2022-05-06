@@ -77,6 +77,7 @@ def hello_word4():
 def update_data():
     spider.update_history()
     spider.update_details()
+    service.update_area_confirm()
     return jsonify('OK')
 
 

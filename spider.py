@@ -6,8 +6,8 @@ import utils
 
 
 def get_tencent_data():
-    url1 = "https://view.inews.qq.com/g2/getOnsInfo?name=disease_h5"
-    url2 = "https://view.inews.qq.com/g2/getOnsInfo?name=disease_other"
+    url1 = "https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf"
+    url2 = "https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=chinaDayList,chinaDayAddList,nowConfirmStatis,provinceCompare"
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
                       " (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36"
@@ -18,8 +18,11 @@ def get_tencent_data():
     res1 = json.loads(r1.text)
     res2 = json.loads(r2.text)
 
-    data_all1 = json.loads(res1["data"])
-    data_all2 = json.loads(res2["data"])
+    res1_data = res1['data']
+    res2_data = res2['data']
+
+    data_all1 = res1_data
+    data_all2 = res2_data
 
     history = {}
     for i in data_all2["chinaDayList"]:
@@ -45,8 +48,8 @@ def get_tencent_data():
             continue
 
     details = []
-    update_time = data_all1["lastUpdateTime"]
-    data_country = data_all1["areaTree"]
+    update_time = data_all1["diseaseh5Shelf"]["lastUpdateTime"]
+    data_country = data_all1["diseaseh5Shelf"]["areaTree"]
     data_province = data_country[0]["children"]
     for pro_infos in data_province:
         province = pro_infos["name"]

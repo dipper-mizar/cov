@@ -264,6 +264,23 @@ def active_location_count():
         utils.close_conn(conn, cursor)
 
 
+def update_area_confirm():
+    cursor = None
+    conn = None
+    try:
+        conn, cursor = utils.get_conn()
+        sql_hongkong = "update details set city='香港' where province='香港'"
+        sql_taiwan = "update details set city='台湾' where province='台湾'"
+        cursor.execute(sql_hongkong)
+        conn.commit()
+        cursor.execute(sql_taiwan)
+        conn.commit()
+    except:
+        traceback.print_exc()
+    finally:
+        utils.close_conn(conn, cursor)
+
+
 if __name__ == '__main__':
     # print(get_na_info())
     # print(get_user_info('user1'))
